@@ -1,7 +1,6 @@
 import {createElement} from '../render';
 
-const createFormTemplate = () => (
-  ` <li class="trip-events__item">
+const createFormTemplate = () => (` <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -165,7 +164,7 @@ const createFormTemplate = () => (
             </li>`
 );
 
-export default class FormView {
+export default class CreateFormView {
   getTemplate() {
     return createFormTemplate();
   }
@@ -174,6 +173,7 @@ export default class FormView {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
+
     return this.element;
   }
 
