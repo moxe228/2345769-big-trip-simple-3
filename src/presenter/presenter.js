@@ -1,4 +1,3 @@
-import CreateFormView from '../view/create_form_view';
 import TripPointView from '../view/trip_point_view';
 import TripEventsView from '../view/trip_events_view';
 import SortView from '../view/sort_view';
