@@ -1,5 +1,5 @@
 import {getRandomText} from './utils';
-import {getRandomInteger} from '../utils';
+import {getRandomInteger} from '../utils/trip_point';
 
 const createRandomOffer = (id) => ({
   id,
@@ -40,6 +40,7 @@ export const getOfferByType = (offerIndex, offers, offerTypesLength, offerType) 
     offers: offersByType
   };
 };
+
 
 export const getOffersByType = (offers, offerTypes) => {
   const offersByType = [];
