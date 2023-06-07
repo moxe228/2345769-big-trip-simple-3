@@ -1,5 +1,5 @@
-import TripPointView from '../view/trip-point-view';
-import PointEditFormView from '../view/point-edit-form-view';
+import TripPointView from '../view/trip_point_view';
+import PointEditFormView from '../view/point_edit_form_view';
 import {remove, render, replace} from '../framework/render';
 import {Mode} from '../const';
 
