@@ -3,4 +3,9 @@ const FilterType = {
   'FUTURE': 'future'
 };
 
-export {FilterType};
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING'
+};
+
+export {FilterType, Mode};

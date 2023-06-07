@@ -7,6 +7,10 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+const updateItem = (items, update) => (
+  items.map((item) => item.id === update.id ? update : item)
+);
+
 const convertToEventDateTime = (date) => (dayjs(date).format('H:mm'));
 const convertToEventDate = (date) => (dayjs(date).format('MMM D'));
 const convertToEditFormDateTime = (date) => (dayjs(date).format('DD/MM/YY HH:mm'));
@@ -19,4 +23,4 @@ const isTripPointFuture = (tripPoint) => {
 };
 
 
-export {getRandomInteger, convertToEventDateTime, convertToEventDate, convertToEditFormDateTime, isTripPointFuture};
+export {updateItem, getRandomInteger, convertToEventDateTime, convertToEventDate, convertToEditFormDateTime, isTripPointFuture};
