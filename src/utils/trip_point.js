@@ -22,5 +22,8 @@ const isTripPointFuture = (tripPoint) => {
   return (dayjs().isAfter(dateFrom) && dayjs().isBefore(dateTo)) || dayjs().isSame(dateFrom) || dayjs().isBefore(dateFrom);
 };
 
+const sortTripPointDateUp = (tripPointA, tripPointB) => dayjs(tripPointA.dateFrom).diff(dayjs(tripPointB.dateFrom));
 
-export {updateItem, getRandomInteger, convertToEventDateTime, convertToEventDate, convertToEditFormDateTime, isTripPointFuture};
+const sortTripPointPriceUp = (tripPointA, tripPointB) => tripPointA.basePrice - tripPointB.basePrice;
+
+export {sortTripPointPriceUp, sortTripPointDateUp, updateItem, getRandomInteger, convertToEventDateTime, convertToEventDate, convertToEditFormDateTime, isTripPointFuture};

@@ -18,7 +18,6 @@ export default class {
 
   init(tripPoint) {
     this.#tripPoint = tripPoint;
-
     const prevTripPointComponent = this.#tripPointComponent;
     const prevEditTripPointComponent = this.#editTripPointComponent;
 
@@ -45,7 +44,6 @@ export default class {
     if (this.#mode === Mode.EDITING) {
       replace(this.#editTripPointComponent, prevEditTripPointComponent);
     }
-
     remove(prevTripPointComponent);
     remove(prevEditTripPointComponent);
   }
