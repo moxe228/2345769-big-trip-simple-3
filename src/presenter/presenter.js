@@ -3,7 +3,7 @@ import SortView from '../view/sort_view';
 import {render} from '../framework/render';
 import EmptyPointListView from '../view/empty_point_list_view';
 import PointPresenter from './point_presenter';
-import {updateItem} from '../utils/common';
+import {updateItem} from '../utils/trip_point';
 import {SortType} from '../const';
 import {sortTripPointDateUp, sortTripPointPriceUp} from '../utils/trip_point';
 
