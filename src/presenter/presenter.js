@@ -1,16 +1,20 @@
-import TripPointView from '../view/trip_point_view';
 import TripEventsView from '../view/trip_events_view';
 import SortView from '../view/sort_view';
 import {render} from '../framework/render';
-import PointEditFormView from '../view/point_edit_form_view';
 import EmptyPointListView from '../view/empty_point_list_view';
+import PointPresenter from './point_presenter';
+import {updateItem} from '../utils/common';
+import {SortType} from '../const';
+import {sortTripPointDateUp, sortTripPointPriceUp} from '../utils/trip_point';
 
 export default class BoardPresenter {
   #boardComponent = new TripEventsView();
   #emptyPointListComponent = new EmptyPointListView();
+  #sortComponent = new SortView();
+  #tripPointPresenter = new Map();
   #boardContainer = null;
   #tripPointsModel = null;
-
+  #currentSortType = SortType.DATE_UP;
   #tripPoints = [];
 
   constructor(boardContainer, tripPointsModel) {
@@ -18,56 +22,74 @@ export default class BoardPresenter {
     this.#tripPointsModel = tripPointsModel;
   }
 
-
   init = () => {
     this.#tripPoints = [...this.#tripPointsModel.tripPoints];
-
     this.#renderBoard();
-
   };
 
-  #renderTripPoint(tripPoint) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        replaceFormToTripEvent.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
+  #renderTripPoint = (tripPoint) => {
+    const tripPointPresenter = new PointPresenter({
+      boardComponent: this.#boardComponent,
+      onModeChange: this.#handleModeChange
+    });
+    tripPointPresenter.init(tripPoint);
+    this.#tripPointPresenter.set(tripPoint.id, tripPointPresenter);
+  };
 
-    const tripPointComponent = new TripPointView(tripPoint,
-      () => {
-        replaceTripEventToForm.call(this);
-        document.addEventListener('keydown', escKeyDownHandler);
-      });
-    const tripPointEditComponent = new PointEditFormView({tripPoint: tripPoint,
-      onFormSubmit: () => {
-        replaceFormToTripEvent.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
-      onFormClose: () => {
-        replaceFormToTripEvent.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }});
+  #handleModeChange = () => {
+    this.#tripPointPresenter.forEach((presenter) => presenter.resetView());
+  };
 
-    function replaceTripEventToForm() {
-      this.#boardComponent.element.replaceChild(tripPointEditComponent.element, tripPointComponent.element);
+  #handleTripPointChange = (updatedTripPoint) => {
+    this.#boardComponent = updateItem(this.#tripPoints, updatedTripPoint);
+    this.#tripPointPresenter.get(updatedTripPoint.id).init(updatedTripPoint);
+  };
+
+  #sortTripPoints = (sortType) => {
+    if (sortType === SortType.DATE_UP) {
+      this.#tripPoints.sort(sortTripPointDateUp);
+    } else {
+      this.#tripPoints.sort(sortTripPointPriceUp);
+    }
+    this.#currentSortType = sortType;
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
     }
 
-    function replaceFormToTripEvent() {
-      this.#boardComponent.element.replaceChild(tripPointComponent.element, tripPointEditComponent.element);
-    }
+    this.#sortTripPoints(sortType);
+    this.#clearTripPoints();
+    this.#renderTripPoints();
+  };
 
-    render(tripPointComponent, this.#boardComponent.element);
-  }
+  #clearTripPoints = () => {
+    this.#tripPointPresenter.forEach((presenter) => presenter.destroy());
+    this.#tripPointPresenter.clear();
+  };
 
-  #renderBoard() {
-    render(new SortView(), this.#boardContainer);
-    render(this.#boardComponent, this.#boardContainer);
+  #renderNoTripPoints = () => {
+    render(this.#emptyPointListComponent, this.#boardComponent.element);
+  };
+
+  #renderTripPoints = () => {
     if (this.#tripPoints.length === 0) {
-      render(this.#emptyPointListComponent, this.#boardComponent.element);
+      this.#renderNoTripPoints();
     }
     for (let i = 0; i < this.#tripPoints.length; i++) {
       this.#renderTripPoint(this.#tripPoints[i]);
     }
-  }
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#boardComponent.element);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  };
+
+  #renderBoard = () => {
+    render(this.#boardComponent, this.#boardContainer);
+    this.#renderSort();
+    this.#renderTripPoints();
+  };
 }

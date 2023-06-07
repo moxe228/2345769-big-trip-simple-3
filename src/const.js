@@ -1,6 +1,6 @@
 const FilterType = {
-  'EVERYTHING': 'everything',
-  'FUTURE': 'future'
+  EVERYTHING: 'everything',
+  FUTURE: 'future'
 };
 
 const Mode = {
@@ -8,4 +8,9 @@ const Mode = {
   EDITING: 'EDITING'
 };
 
-export {FilterType, Mode};
+const SortType = {
+  DATE_UP: 'date-up',
+  PRICE_DOWN: 'price-down'
+};
+
+export {SortType ,FilterType, Mode};
